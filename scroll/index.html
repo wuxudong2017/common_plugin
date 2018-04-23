@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body style="background-color: green">
+<div class="banner">
+    <!-- 添加图片 -->
+    <div class="move" id="move">
+        <ul>
+            <li><img src="http://www.jq22.com/demo/myscroll201712192341/images/a1.png" alt=""></li>
+            <li><img src="http://www.jq22.com/demo/myscroll201712192341/images/a2.png" alt=""></li>
+            <li><img src="http://www.jq22.com/demo/myscroll201712192341/images/a3.png" alt=""></li>
+            <li><img src="http://www.jq22.com/demo/myscroll201712192341/images/a4.png" alt=""></li>
+            <li><img src="http://www.jq22.com/demo/myscroll201712192341/images/a5.png" alt=""></li>
+        </ul>
+    </div>
+    <!-- 添加控制条 -->
+    <div class="ctrl" id="ctrl"></div>
+</div>
+<span></span><span></span>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/demo.js"></script>
+<script>
+
+$('.banner').mySlide({
+    picEl: $('#move'), //图片父级，不传默认为banner内第1个div
+    ctrlEl: $('#ctrl'), //控制条父级，包括小圆点和左右箭头，不传默认为banner内第2个div
+    libs: true, //是否创建底部小圆点，true || false,不传默认true
+    arrows: true, //是否创建左右箭头，true || false,不传默认true
+    autoPlay: true, //是否自动播放，true || false,不传默认true
+    time: 2000, //自动播放间隔时间，true || false,不传默认2000
+    speed: 400, //图片切换速度，不传默认400
+    effect: 'left' //轮播的改变方式 top || left || fade，不传默认left
+})
+
+
+
+</script>
+
+</html>
