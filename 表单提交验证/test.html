@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <form action="" method="get" class="form-horizontal" id="mayform">
+                <div class="form-group">
+                    <input type="text" class="form-control" check="email" name="user">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" check="password pass1" name="pass">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" check="password pass2" name="pass">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg" type="submit">Click</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script src="jquery-1.12.4.js"></script>
+<script src="main.js"></script>
+<script>
+    $(function () {
+        $("#mayform").checkForm();
+    })
+
+
+
+</script>
+</html>
