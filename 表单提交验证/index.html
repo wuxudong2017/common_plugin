@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <title>Document</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div action="" method="get" class="form-horizontal" id="mayform">
+                <div class="form-group">
+                    <input type="text" class="form-control" check="num" name="user">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" check="email" name="pass">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" check="unempty" name="pass">
+                </div>
+                <div class="form-group">
+                    <input type="file" class="form-control" check="unempty" name="pass">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" check="unempty pass1" name="pass">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" check="unempty pass2" name="pass">
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg" id="test1">Click</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/jquery-1.12.4.js"></script>
+<!--<script src="main.js"></script>-->
+<script>
+$(function () {
+    var $par=$("#mayform");
+    var options={
+       msg:{
+            tip_success:"验证通过",
+            tip_err:"验证失败",
+            tip_email:"邮箱格式不正确",
+            tip_phone:"手机格式不正确",
+            tip_num:"不是纯数字",
+            tip_pass:"两次密码不一样",
+            tip_default:"不能为空"
+        },
+       reg:{
+           reg_empty:/^\s*$/,
+            reg_num:/\d$/i,
+            reg_email:/^\w+\@[A-Za-z0-9]+\.[A-Za-z]{2,4}$/i,
+            reg_chinese:/^[\u4E00-\u9FA5]+$/,
+            reg_phone:/^1[3458]{1}[0-9]{9}$/
+        }
+    }
+    function chk(_val,reg) {
+        return reg.test(_val)
+    }
+    function equal(_val1,_val2) {
+        console.log(_val1,_val2)
+        return _val1==_val2?true:false;
+    }
+    function showMsg(obj,msg,mark) {
+        $(obj).nextAll('.err').remove();
+        $(obj).next('.errMsg').remove();
+        if(mark){
+            $(obj).parents(".form-group").attr("class","has-success form-group  has-feedback")
+            var _html='<span class="err form-control-feedback"><i class="fa  fa-check"></i></span>'
+        }else{
+            $(obj).parents(".form-group").attr("class","form-group has-error has-feedback")
+            var _html='<span class="err form-control-feedback"><i class="fa fa-warning"></i></span>'
+            $(obj).after('<span class="errMsg">'+msg+'</span>')
+        }
+        $(obj).after(_html)
+        return mark
+    }
+    function check(obj,_val,reg) {
+        switch (reg){
+            case "num":
+                return chk(_val,options.reg.reg_num)?showMsg(obj,options.msg.tip_success,true):showMsg(obj,options.msg.tip_num,false)
+                break;
+            case "email":
+                return chk(_val,options.reg.reg_email)?showMsg(obj,options.msg.tip_success,true):showMsg(obj,options.msg.tip_email,false)
+                break;
+            case "pass1":
+               return  pw1=_val;
+            case "pass2":
+                return equal(pw1,_val)?showMsg(obj,options.msg.tip_success,true):showMsg(obj,options.msg.tip_pass,false);
+                break;
+            case "unempty":
+                return  _val.length>0?showMsg(obj,options.msg.tip_success,true):showMsg(obj,options.msg.tip_default,false);
+                break;
+            default:
+                return true;
+        }
+    }
+    function _checkAll() {
+        isOk=true;
+        var pw1;
+        $(":text,:password,:file",$par).each(function () {
+            if( $(this).attr("check")){
+                var arr=$(this).attr("check").split(" ")
+                for (var i=0;i<arr.length;i++){
+                   isOk=check(this,$(this).val(),arr[i]);
+                }
+            }
+        })
+        return isOk
+    }
+    function _checkInit($par) {
+        var pw1;
+        $(":text,:password,:file",$par).each(function () {
+            $(this).blur(function () {
+                if(Boolean($(this).attr("check"))) {
+                    var arr = $(this).attr("check").split(" ")
+                    for (var i = 0; i < arr.length; i++) {
+                         isOk = check(this,$(this).val(),arr[i]);
+                    }
+                }
+            })
+        })
+    }
+    _checkInit($par)
+    $("#test1").click(function () {
+        //判断函数是否符合要求,正确执行下一步操作,错误则执行错误操作
+       if (_checkAll()){
+            console.log("验证通过")
+
+       }else{
+           console.log("验证失败")
+       }
+
+
+    })
+
+
+
+})
+
+
+
+
+
+
+
+</script>
+</html>
