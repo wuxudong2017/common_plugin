@@ -1,0 +1,309 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>视频</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+</head>
+<body>
+
+<div class="video-box">
+    <div class="videos">
+        <div class="video_b" style="margin-top:0">
+            <div class="video_b_in">
+                <div class="video_ls">
+                    <div class="video-wrap">
+                        <video id="vids" >
+                            您的浏览器不支持h5
+                        </video>
+                    </div>
+                    <!--title-->
+                    <div class="title_top">
+                        test1
+                    </div>
+                    <!--暂停-->
+                    <div id="pass">
+                        <span class="fa fa-play fa-3x"></span>
+                    </div>
+                    <!--控制器-->
+                    <div class="controls">      
+                        <div id="pBar">
+                            <div class="pBar_bj">
+                                <div id="buff"></div>
+                                <div id="pBar_move">
+                                    <div id="pBtn"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="trol_list">
+                            <!--暂停和快进快退-->
+                            <div class="list_1">
+                                <i class="fa fa-backward " onClick="ktui()"></i>
+                                <i class="fa  fa-pause" id="ztbf"></i>
+                                <i class="fa fa-forward" onClick="kjin()"></i>
+                            </div>
+                            <!--声音-->
+                            <div class="voice">
+                                <i class="fa  fa-volume-up" style="float:left;"></i>
+                                <div class="voicep">
+                                    <div id="vBar">
+                                        <div id="vBar_in"></div>
+                                    </div>
+                                    <div id="vBtn"></div>
+                                </div>
+                            </div>
+                            <!--时间-->
+                            <div class="vtime">
+                                <span id="nTime">00:00:00</span>/<span id="aTime">00:00:00</span>
+                            </div>
+                            <!--全屏-->
+                            <i id="qp" class="fa  fa-expand"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video_rs" id="out">
+                    <div class="video_rs_t">
+                        <span>视频列表</span>
+                    </div>
+                    <div class="video_rs_b" id="con">
+                        <!--列表-->
+                        <div class="one_tb" vid_src="test">
+                            <span class="one_tb_l">1</span>
+                            <div class="one_tb_c">
+                                <img src="media/timg.jpg">
+                                <b></b>
+                            </div>
+                        </div>
+                        <div class="one_tb" vid_src="test1">
+                            <span class="one_tb_l">1</span>
+                            <div class="one_tb_c">
+                                <img src="media/timg.jpg">
+                                <b></b>
+                            </div>
+                        </div>
+                        <div class="one_tb" vid_src="test2">
+                            <span class="one_tb_l">1</span>
+                            <div class="one_tb_c">
+                                <img src="media/timg.jpg">
+                                <b></b>
+                            </div>
+                        </div>
+                        <div class="one_tb" vid_src="test3">
+                            <span class="one_tb_l">1</span>
+                            <div class="one_tb_c">
+                                <img src="media/timg.jpg">
+                                <b></b>
+                            </div>
+                        </div>
+                        <div class="one_tb" vid_src="test3">
+                            <span class="one_tb_l">1</span>
+                            <div class="one_tb_c">
+                                <img src="media/timg.jpg">
+                                <b></b>
+                            </div>
+                        </div>
+                        <div class="one_tb" vid_src="test3">
+                            <span class="one_tb_l">1</span>
+                            <div class="one_tb_c">
+                                <img src="media/timg.jpg">
+                                <b></b>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+
+                        <p class="drag"></p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script>
+    var vids=document.getElementById("vids");
+    var sskd=$(".controls").width();
+    var xzdz=".mp4";
+    vids.src="test.mp4";
+    //视频列表
+    $(".one_tb").click(function(){
+        $(this).addClass("on").siblings(".one_tb").removeClass("on");
+        var hName=$(this).find("h3").html();
+        var vid_src=$(this).attr("vid_src");
+        $(".title_top").html(hName);
+        vids.src=vid_src+xzdz;
+        vids.play();
+    })
+    //点击暂停
+    $("#pass").click(function(){
+        $(this).css({display:"none"});
+        $("#ztbf").attr("class","fa fa-play")
+        vids.play();
+    });
+    $("#ztbf").click(function(){
+        if(vids.paused){
+            //console.log("pause")
+            vids.play();
+            $("#ztbf").attr("class","fa fa-play")
+        }else{
+            //console.log("play")
+            vids.pause()
+            $("#ztbf").attr("class","fa fa-pause")
+        }
+    })
+    vids.onplay=function(){
+        $("#pass").css({display:"none"});
+        $("#ztbf").attr("class","fa fa-play");
+    }
+    vids.onpause=function(){
+        $("#pass").css({display:"block"});
+        $("#ztbf").attr("class","fa fa-pause");
+        $("#pBar").on('mouseup',function(){
+            $(this).off('mousemove')
+        })
+    }
+    function numFormat(time){
+        time = parseInt(time);
+        var h = addZero(Math.floor(time/3600));
+        var  m = addZero(Math.floor((time%3600)/60));
+        var s = addZero(Math.floor(time%60));
+        return h+":"+m+":"+s;
+    }
+    function addZero(num){
+        if(num<10){
+            return "0"+num;
+        }else{
+            return ''+num;
+        }
+    }
+    vids.oncanplay=function(){
+        var aTime=numFormat(vids.duration);
+        $("#aTime").html(aTime);
+        vids.ontimeupdate=function(){
+            sskd=$(".controls").width()
+            //console.log(vids.buffered.end(0))
+            var hc=(vids.buffered.end(0)/vids.duration)*sskd;
+            $("#buff").css({width:hc+'px'})
+            var nTime=numFormat(vids.currentTime);
+            $("#nTime").html(nTime);
+            var nLengh=(vids.currentTime/vids.duration)*(sskd-20);
+            $("#pBar_move").css({width:nLengh+'px'});
+        }
+       //进度条点击
+        $("#pBar").mousedown(function(e){
+            var cLk=e.clientX;
+            var pJl=$("#pBar").offset().left;
+            var mLengh=cLk-pJl;
+            if(mLengh>=(sskd-20)){
+                mLengh=(sskd-20)
+            }
+            $("#pBar_move").css({width:mLengh+'px'});
+            var cTime1=mLengh/(sskd-20)*vids.duration;
+            vids.currentTime=cTime1;
+            var cTime2=numFormat(cTime1);
+            $("#nTime").html(cTime2);
+            vids.play();
+            //进度条控制
+            $(document).on('mousemove',function(e){
+                vids.pause();
+                var newLeft=e.clientX-pJl;
+                if(newLeft<=0){
+                    newLeft=0;
+                }
+                if(newLeft>=(sskd-20)){
+                    newLeft=(sskd-20)
+                }
+                var cTime3=newLeft/(sskd-20)*vids.duration;
+                var cTime4=numFormat(cTime3);
+                $("#pBar_move").css({width:newLeft+'px'});
+                vids.currentTime=cTime3;
+                $("#nTime").html(cTime4);
+            })
+
+            $("body").on('mouseup',function(){
+                $(document).off('mousemove');
+                vids.play();
+            })
+        })
+    }
+  //快进快退函数
+    function ktui(){
+        vids.currentTime-=10;
+    }
+    function kjin(){
+        vids.currentTime+=10;
+    }
+  //键盘控制快进快退
+    $(document).keydown(function (event) {
+        if (event.keyCode===37){
+            vids.currentTime-=10;
+        }
+        if (event.keyCode===39){
+            vids.currentTime+=10;
+        }
+      //空格播放
+        if (event.keyCode===32){
+            if(vids.paused){
+                vids.play()
+                $("#ztbf").attr("class","fa fa-pause")
+            }else{
+                vids.pause()
+                $("#ztbf").attr("class","fa fa-play")
+            }
+        }
+        //全屏退出
+        if (event.keyCode===27){
+            $(".video_ls").removeClass("on");
+            $(".controls").css({width:"100%"})
+        }
+    })
+    //双击全屏幕
+    $(".video_ls").dblclick(function(){
+        $(".video_ls").addClass("on");
+        var oBox=$("body").width()-66;
+        $(".controls").css({width:oBox+'px'})
+    });
+    //按钮控制
+    $("#qp").click(function(){
+        if($(".video_ls").hasClass("on")){
+            $(".video_ls").removeClass("on");
+            $(".controls").css({width:"100%"})
+        }else{
+            $(".video_ls").addClass("on");
+            var oBox=$("body").width()-66;
+            $(".controls").css({width:oBox+'px'});
+
+        }
+    })
+    //音量
+    vBtn.onmousedown = function(ev){
+        var ev=ev||window.event;
+        var xs=ev.clientX - this.offsetLeft;
+        document.onmousemove = function(ev){
+            var newLefts=ev.clientX-xs;
+            if(newLefts<=0){
+                newLefts=0;
+            }else if(newLefts>=vBar.offsetWidth-vBtn.offsetWidth){
+                newLefts=vBar.offsetWidth-vBtn.offsetWidth;
+            }
+            vBtn.style.left=newLefts+"px";
+            vBar_in.style.width =(newLefts+8)+"px";
+            var prop=newLefts/(vBar.offsetWidth-vBtn.offsetWidth);
+            vids.volume =prop;
+
+        };
+        document.onmouseup = function(){
+            document.onmousemove = null;
+            document.onmouseup = null;
+        }
+    }
+//滚动条
+   
+
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+#vid{
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+.controls{
+	height: 60px;
+	background-color: rgba(0,0,0,0.6);
+	width: 100%;
+	position: absolute;
+}
+.video-wrap{
+	width: 480px;
+	margin:0 auto;
+	position: relative;
+}
+.playbtn-List{
+	height: 40px;
+	line-height: 40px;
+
+}
+.playbtn-List span{
+	display: inline-block;
+}

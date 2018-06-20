@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<div class="video-wrap">
+	<video id="vid" src="test.mp4"></video>
+	<div class="controls">
+
+		<div class="playbtn-List">
+			<span class="fa fa-backward" onclick="kuiatui()"></span>
+            <span class="fa fa-play" id="ztbf"></span>
+            <span class="fa fa-forward" onclick="kuijin()"></span>
+		</div>
+
+        <div class="time">
+            <span class="ntime">00:00:00</span>
+            <span class="timeAll">00:00:00</span>
+        </div>
+
+	</div>
+</div>
+
+
+
+
+
+</body>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script>
+    var vids=document.getElementById("vid");
+    function numFormat(time){
+        var time1=parseInt(time);
+        var h=addZero(Math.floor(time1/3600));
+        var m=addZero(Math.floor((time%3600)/60));
+        var s=addZero(Math.floor(((time1%3600)%60)%60));
+        return h+":"+m+":"+s
+    }
+    function addZero(e){
+        if(e<=9){
+            e="0"+e;
+        }
+        return e
+    }
+
+
+    vids.oncanplay=function(){
+        var atime=numFormat(vids.duration)
+        $('.timeAll').text(atime);
+        vids.ontimeupdate=function(){
+            var ntime=numFormat(vids.currentTime);
+            $(".ntime").text(ntime)
+        }
+    }
+    function kuijin(){
+        vids.currentTime+=10;
+
+    }
+    function kuiatui(){
+        vids.currentTime-=10;
+
+    }
+    $("#ztbf").click(function () {
+
+        if (vids.paused){
+            vids.play();
+            $(this).attr("class","fa fa-pause")
+        }else{
+            vids.pause();
+            $(this).attr("class","fa fa-play")
+        }
+    })
+
+
+
+
+
+    
+</script>
+
+
+
+</html>
