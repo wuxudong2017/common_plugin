@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+	<link rel="stylesheet" href="skin/skin.css" />
+	<script type="text/javascript" src="jQuery.js" ></script>
+	<script src="flowplayer-3.2.8.min.js"></script>
+<!--	<script type="text/javascript" src="flowplayer.js" ></script>-->
+</head>
+<body>
+<!--<div class="flowplayer">
+   <video>
+      <source type="video/mp4"             src="tt.mp4">
+   </video>
+</div>-->
+
+
+
+
+<a href="#"
+	style="display: block;width: 640px;height: 480px;"
+	id="player"
+	></a>
+
+</body>
+<script>
+flowplayer("player","flowplayer-3.2.8.swf",{
+	clip:{
+
+		//autoplay:true,//是否自动播放
+		//autoBuffering:true,//是否开启自动缓冲
+		live:true,
+		autoPlay:false,
+
+		
+	},
+	playlist:[{
+		url:"1.jpg",
+	},
+		
+		{
+			url:"29cd97dac49547e6b763c7335d1479fd", //需要播放的文件
+			provider:"rtmp", //提供者
+			
+		}
+	],
+	plugins:{
+		rtmp:{
+			url:"flowplayer.rtmp-3.2.13.swf",
+			netConnectionUrl:"rtmp://v1947e83c.live.126.net/live",
+		},
+		controls:{
+			 bottom: 0,//功能条距底部的距离
+                        height: 24, //功能条高度
+                        zIndex: 1,
+                        fontColor: '#ffffff',
+                        timeFontColor: '#333333',
+                        playlist: true,//上一个、下一个按钮
+                        play:true, //开始按钮
+                        volume: true, //音量按钮
+                        mute: true, //静音按钮
+                        stop: true,//停止按钮
+                        fullscreen: true, //全屏按钮
+                        scrubber: true,//进度条
+                        //url: "flowplayer.controls-3.2.12.swf", //决定功能条的显示样式（功能条swf文件,根据项目定亦可引用:http://releases.flowplayer.org/swf/flowplayer.controls-3.2.12.swf）
+                        time: true, //是否显示时间信息
+                        autoHide: true, //功能条是否自动隐藏
+                        backgroundColor: '#aedaff', //背景颜色
+                        backgroundGradient: [0.1, 0.1, 1.0], //背景颜色渐变度（等分的点渐变）
+                        opacity: 0.5, //功能条的透明度
+                        borderRadius: '30',//功能条边角
+                        tooltips: {
+                            buttons: true,//是否显示
+                            fullscreen: '全屏',//全屏按钮，鼠标指上时显示的文本
+                            stop:'停止',
+                            play:'开始',
+                            volume:'音量',
+                            mute: '静音',
+                            next:'下一个',
+                            previous:'上一个'
+                        }
+
+		}
+	}
+	
+	
+	
+})
+	
+//直播流
+/*
+http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8
+rtmp://live.hkstv.hk.lxdns.com/live/hks
+
+*/
+
+	
+	
+</script>
+</html>
