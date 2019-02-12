@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+var app = {
+    timeToSec: function (val) {
+        var hour = val.split(':')[0],
+            min = val.split(':')[1];
+        return Number(hour * 60) + Number(min)
+    },
+    zeroTime(val) {
+        if (val < 10) {
+            return '0' + val
+        }
+        return val
+    },
+    timeString(val) {
+        let hour = this.zeroTime(parseInt(val / 60))
+        let min = this.zeroTime(val % 60);
+        return hour + ':' + min
+    },
+    timeFun: function (val) {
+        var dataB = {}
+        if (val instanceof Object) {
+            for (key in val) {
+                dataB[key] = val[key]
+            }
+         
+        } else {
+            if(!val){
+                dataB = {
+                    startTime: '08:00:00',//上学时间
+                    endTime: '17:00:00',//放学时间
+                    rTime: '14:00:00', // 下午上课时间
+                    classTime: 40,// 每节课上课时间
+                    resetTime: 10,// 课间休息时间
+                    secTime: 20, // 大课间时间
+                    secNum: 2,
+                }
+            }else{
+                alert('请输入json数据');
+                 debugger;
+            }
+          
+        }
+        let start = this.timeToSec(dataB.startTime);
+        let end = this.timeToSec(dataB.endTime);
+        let endP = this.timeToSec(dataB.rTime);
+        var arrS = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+        var Am = ['上午', '下午'];
+        var Ftime = this.timeToSec('12:00:00');
+        var arr = [], i = 0;
+        while (start < end) {
+            let time = start;
+            if (time <= Ftime) {
+                console.log('上午')
+                if (i != dataB.secNum - 1) {
+                    start += (dataB.classTime + dataB.resetTime);
+                    if ((start - dataB.resetTime) < Ftime) {
+                        console.log(`i=${i}---start${this.timeString(time)}------end:${this.timeString(start - dataB.resetTime)}`);
+                    }
+                } else {
+                    start += (dataB.classTime + dataB.secTime);
+                    console.log(`i=${i}---start${this.timeString(time)}------end:${this.timeString(start - dataB.secTime)}`)
+
+                }
+            } else {
+                console.log('下午')
+                if (start < endP) {
+                    start = endP;
+                    i = 0;
+                }
+                let time2 = start;
+                start += (dataB.classTime + dataB.resetTime);
+                console.log(`i=${i}---start${this.timeString(time2)}------end:${this.timeString(start - dataB.resetTime)}`)
+            }
+            // 防止陷入死循环
+            if (i > 20) {
+                break;
+            }
+            i++;
+        }
+
+    }
+}
+app.timeFun()
+
+
+</script>
+</html>
