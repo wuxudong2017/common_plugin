@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="./css/font-awesome.css">
+	<link rel="stylesheet" href="./css/animate.css">
+	<link rel="stylesheet" href="./css/scss/index.css">
+	<script src="./js/rem.js"></script>
+	<script src="./js/mock/mock.js"></script>
+	<script src="./js/mock/api.js"></script>
+	<script src="./js/zepto/zepto.js"></script>
+	<script src="./js/zepto/touch.js"></script>
+	<!-- <script src="./js/plugin.js"></script> -->
+	<style>
+
+	</style>
+</head>
+
+<body>
+	<button class="btn btn-primary">Click</button>
+</body>
+<script>
+	(function ($) {
+		// 弹框Toast
+		$.Toast = function (option) {
+			var optionDefalut = {
+				className: 'my-toast',
+				type: 'text',
+				message: '操作',
+				duration: 2000,
+				mask: false,
+			}
+			var Plugin = (function () {
+				function Plugin() {
+					this.setting = $.extend({}, optionDefalut, option);
+					this.init()
+				}
+				Plugin.prototype = {
+					init: function () {
+						var set = this.setting, time = null;
+						var $mark = $('<div class="toast-mark"></div>')
+						var $wrap = $('<div class="toast ' + this.setting.className + '"></div>');
+						var $icon = "";
+						// console.log(set)
+						if (set.type == 'success') {
+							$icon = $(' <i class="fa fa-check icon"></i>');
+						} else if (set.type == 'error') {
+							$icon = $(' <i class="fa fa-exclamation icon"></i>');
+						}
+						else if (set.type == 'error') {
+							$icon = $(' <i class="fa fa-exclamation icon"></i>');
+
+						} else if (set.type == 'loading') {
+							$icon = $(' <i class="fa fa-cog icon"></i>');
+
+						} else {
+							$icon = "";
+						}
+						if (set.mask) { $('body').append($mark) }
+						$mark.bind('tap', function () {
+							$(this).remove();
+							$wrap.remove();
+							clearTimeout(time)
+						})
+						$('body').append($wrap.append($icon).append('<span>' + set.message + '</span>'));
+						time = setTimeout(() => {
+							$wrap.animate({
+								opacity: 0
+							}, {
+									duration: 600,
+									easing: 'ease-in',
+									complete: function () {
+										$(this).remove();
+										if (set.onClose) {
+											set.onClose.apply(this)
+										}
+									}
+								})
+						}, set.duration)
+					}
+				}
+				return new Plugin()
+			})()
+		}
+		$.Dialog = function (option) {
+			var optionDefalut = {
+				title: '标题',
+				message: "内容",
+			}
+			var Plugin = (function () {
+				function Plugin() {
+					this.setting = $.extend({}, optionDefalut, option);
+					this.init();
+				}
+				Plugin.prototype = {
+					init: function () {
+						var set = this.setting;
+						console.log(set)
+						var $mask = $('	<div class="toast-mark"></div>');
+						var $wrap = $('<div class="dialog"></div>');
+						var $title = $('<div class="title">' + set.title + '</div>')
+						var $content = $('<div class="content">' + set.message + '</div>');
+						var $btns = $('<div class="btns"></div>');
+						var $cancel = $('<button class="btn cancel">取消</button>')
+						var $confirm = $('	<button class="btn confirm">确定</button>')
+						if (set.type == 'confirm') {
+							$btns.append($cancel).append($confirm)
+						} else {
+							$btns.append($confirm)
+						}
+						$('body').append($mask.append($wrap.append($title).append($content).append($btns)))
+						$confirm.bind('tap', function () {
+							$wrap.animate({
+								opacity: 0
+							}, {
+									duration: 200,
+									complete: function () {
+										if (set.confirm) { set.confirm.apply(this) }
+										$mask.remove();
+									}
+								})
+						})
+						$cancel.bind('tap', function () {
+							$wrap.animate({
+								opacity: 0
+							}, {
+									duration: 200,
+									complete: function () {
+										if (set.cancel) { set.cancel.apply(this) }
+										$mask.remove();
+									}
+								})
+						})
+					}
+				}
+				return new Plugin()
+
+			})()
+		}
+	})(Zepto)
+
+	$(function () {
+
+
+	})
+/**
+配置
+
+$.Toast({
+    type: 'success', // 类型 , success,warning,error
+    message: 'hello World', // 内容
+    duration: 2000, // 显示时间
+    mask: false, // 是否需要蒙版
+    onClose: function () { // 关闭的时候回调
+        alert('kk')
+    }
+
+})
+$.Dialog({
+    type: 'confirm', // 类型 alert,confirm
+    title: '我的弹窗', // 弹窗标题
+    message: '我的内退', // 弹窗内容
+    confirm: function () {  // 确定按钮回调
+        alert('confirm')
+    },
+    cancel: function () { } // 取消按钮回调
+})
+
+
+
+
+
+*/
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/zepto/zepto.js"></script>
+    <style>
+    *{margin: 0;padding: 0}
+    .container{
+        width: 100%;
+    height: 100%;
+    max-width: 640px;
+    margin: 0 auto;}
+    body,html{
+        width: 100%;
+        height: 100%;
+    }
+    .container .list{
+        background-color: green;
+    }
+    .loading{
+        text-align: center;
+        width: 100%;
+        overflow: hidden;
+       
+    }
+    .loading-box {
+        height: 50px;
+        line-height: 50px;
+    }
+    @keyframes roate{
+        0%{
+            transform:  rotateZ(0deg)
+        }
+        50%{
+            transform: rotateZ(180deg)
+        }
+        100%{
+            transform: rotateZ(360deg)
+        }
+    }
+    .loading .load-icon{
+        content: '';
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 2px #cccccc solid;
+        border-bottom-color: transparent;
+        vertical-align: middle;
+        animation: roate 1s linear  infinite;
+        margin: 10px;
+
+    }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul class="list">
+            <li>lll</li>
+            <li>lll</li>
+            <li>lll</li>
+        </ul>
+
+    </div>
+</body>
+<script>
+
+
+
+!(function($){
+    'use strict'
+    var Plugin ,pluginName = "dropRefresh",
+    privateMethod;
+    Plugin = (function(){
+        function plugin(ele,options){
+            this.options = $.extend({}, $.fn[pluginName].defaults, options);
+            this.$loading = false;
+            this.$loadCon = $('<div class="loading"><div class="loading-box"><i class="load-icon"></i>加载中...</div></div>')
+            this.$loadFreshDown= $('<div class="loading"><div class="loading-box">↓下拉刷新</div></div>')
+            this.$laodUpdate = $('<div class="loading"><div class="loading-box">↑释放更新</div></div>');
+            this.$box = $('.loading-box');
+            this.$ele = $(ele);
+            this.init()
+        }
+        // aFun 获取touches
+        function aFun(a){
+            a.touches || (a.touches = a.originalEvent.touches)
+        }
+        // 触摸触发的时候获取坐标
+        function bFun(ev,$this){
+            $this._startY=ev.touches[0].pageY;
+            $this.touchScrollTop = $($this.options.scrollArea).scrollTop()
+        }
+        // 判断滑动方向
+        function cFun(ev,$this){
+            var dist = Math.abs($this._moveY)>$this.options.distance?$this.options.distance:Math.abs($this._moveY);
+            $this._curY = ev.touches[0].pageY;
+            $this._moveY = $this._curY - $this._startY;
+            $this.direction = $this._moveY>0?"down":$this._moveY<0&&($this.direction = "up");
+            $this.$ele.prepend($this.$loadFreshDown);
+            $this.$box.css({
+                    height:dist,
+                    transition:'all 0.3s linear'
+                })
+                
+        }
+        // 滑动结束
+        function dFun($this){
+            var dist = Math.abs($this._moveY);
+            console.log('dd')
+            if($this.loadUpFn !=""&&$this.direction =="down"){
+                $this.$box.css({
+                    height:0,
+                    transition:' all 0.3s linear'
+                })
+            }
+           
+          
+
+        }
+        // 插件方法核心区
+        plugin.prototype = {
+            init:function(){
+                var $this =  this
+               this.$ele.on('touchstart',function(e){
+                   $this.$loading || (aFun(e),bFun(e,$this));
+               })
+               this.$ele.on('touchmove',function(ev){
+                   $this.$loading || (aFun(ev),cFun(ev,$this))
+               })
+               this.$ele.on('touchend',function(){
+                $this.$loading || dFun($this)
+               })
+            }
+        }
+        return plugin
+    })();
+
+
+
+
+    
+    privateMethod = function(){
+        
+    }
+
+   $.fn[pluginName] = function (options) {
+        return this.each(function () {
+            var $this = $(this),
+                instance = $.fn[pluginName].lookup[$this.data('plugin')];
+            if (!instance) {
+                //zepto的data方法只能保存字符串，所以用此方法解决一下
+                $.fn[pluginName].lookup[++$.fn[pluginName].lookup.i] = new Plugin(this, options);
+                $this.data('plugin', $.fn[pluginName].lookup.i);
+                instance = $.fn[pluginName].lookup[$this.data('plugin')];
+            }
+ 
+            if (typeof options === 'string') instance[options]();
+        })
+    };
+ 
+    $.fn[pluginName].lookup = { i: 0 };
+ 
+    /**
+     * 插件的默认值
+     */
+    $.fn[pluginName].defaults = {
+        scrollArea: window, // 滑动区域
+        autoLoad: true, // 自动加载
+        distance:50, // 拉动距离
+        loadUpFn:"", // 向上拉动
+        loadDownFn:"" // 向下拉动函数
+    };
+ 
+    /*
+     * 优雅处： 通过data-xxx 的方式 实例化插件。
+     * 这样的话 在页面上就不需要显示调用了。
+     * 可以查看bootstrap 里面的JS插件写法
+     */
+    $(function () {
+        return new Plugin($('[data-'+pluginName+']'));
+    });
+
+
+
+
+
+
+
+
+
+
+
+})(window.Zepto||window.jQuery)
+
+$('.container').dropRefresh({
+    scrollArea:window
+})
+
+
+
+
+</script>
+</html>
