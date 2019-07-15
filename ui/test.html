@@ -8,18 +8,21 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="ipt"></div>
+<button id="btn">Click</button>
+    
 </body>
 <script src="./js/jquery.js"></script>
 <script src="./js/dream-ui.js"></script>
 <script>
 $(function(){
+   $('#btn').click(function(){
     UI.notice.info({
             title: "消息标题",
             content: "消息内容",
             closable: true,
             autoClose:false
         });
+   })
 
 
 

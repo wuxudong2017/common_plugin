@@ -5,7 +5,7 @@
     } else if (typeof module !== "undefined" && typeof exports === "object") {
         module.exports = factory(require('jquery'));
     } else {
-        globalThis.UI = factory(global.jQuery)
+        global.UI = factory(global.jQuery)
     }
 
 
@@ -75,27 +75,26 @@
             var defaultOption = {
                 type: 'info',
                 title: '提示',
-                message: 'hello World',
+                message: '提示消息',
                 duration: 2000,
                 showClose: true,
                 onClose() {
-                    console.log('close')
+
                 },
-                position: 'to-right'
+                position: 'top-right'
             }, size = arg.length, options = {};
             if (!size) return;
             if (arg[0] instanceof Object) {
                 options = arg[0]
             } else {
-                throw new Error('参数格式不正确')
+                options.message = arg[0]
             }
+            var opt = $.extend({}, defaultOption, options);
             if (type) {
                 opt.type = type
             }
-            var opt = $.extend({}, defaultOption, options);
             $wrap = $('<div class="ui_notify" style="right:0"><div class="' + opt.type + '">' +
-                '<div class="icon"><i class="iconfont icon-' + opt.type + '"></i></div>' +
-                '<div class="group"><h2 class="title">' + opt.title + '</h2> <div class="content"><p>' + opt.message + '</p></div>'
+                '<div class="group"><div class="icon"><i class="iconfont icon-' + opt.type + '"></i></div><h2 class="title">' + opt.title + '</h2> <div class="content"><p>' + opt.message + '</p></div>'
                 + '</div></div>');
             $body.append($wrap);
             $container = $('.ui_notify');
@@ -103,12 +102,11 @@
                 var $close = $('<div class="ui_notify_close"><i class="iconfont icon-close-fill"></i></div>');
                 $container.children().append($close)
             }
-            
+            var pos = opt.position.split('-');
             $container.each(function (index, el) {
                 var h = $(el).outerHeight();
-                console.log(h)
                 $(el).css({
-                    top:(h*index)+'px'
+                    top: ((h + 10) * index) + 'px'
                 })
                 // 手动关闭
                 var $close = $(el).find('.ui_notify_close');
@@ -117,20 +115,19 @@
                         UI.notify.close($close.parents('.ui_notify'))
                     })
                 }
+                // 定时自动关闭
+                if (typeof opt.duration == 'number' && opt.duration > 0) {
+                    var time = setTimeout(function () {
+                        clearTimeout(time)
+                        UI.notify.close($(el))
+                    }, opt.duration)
+                }
+
             })
             // 存储 close 函数
             if (typeof opt.onClose == 'function') {
                 $container.data('ui-notify-onClose', opt.onClose)
             }
-            // 定时自动关闭
-            if (typeof opt.duration == 'number' && opt.duration > 1000) {
-                var time = setTimeout(function () {
-                    clearTimeout(time)
-                    UI.message.close($container)
-                }, opt.duration)
-            }
-
-
         }
     }
     var UI = {
@@ -250,37 +247,249 @@
         },
         notify: function (options) {
             return Methods.notify.call(this, null, arguments)
+        },
+        // 分页
+        page: function (options) {
+            console.log('kkk111')
+            var defaultOption = {
+                page: 1,
+                pageSize: 10,
+                total: 0,
+                showTotal: false,
+                totalTxt: "共{total}条",
+                showSkip: false,
+                showPN: true,
+                prevPage: "上一页",
+                nextPage: "下一页",
+                backFun: function (page) { }
+            };
+
+            if (!options.ele) throw new Error('请先选中节点');
+            var ele = options.ele
+            function Plugin(ele, options) {
+                this.settings = $.extend({}, defaultOption, options);
+                this.element = $(ele);
+                this.pageNum = 1;
+                this.pageList = [];
+                this.init()
+            }
+            Plugin.prototype = {
+                init: function () {
+                    console.log(this.settings)
+                    if (this.settings.total >= 0) {
+                        this.viewHtml();
+                        this.clickBtn();
+                        this.element.addClass('page_container')
+                    }
+                },
+                creatHtml: function (i) {
+                    if (i == this.settings.page) {
+                        this.pageList.push('<span class="active" data-page=' + i + '>' + i + '</span>')
+                    } else {
+                        this.pageList.push('<span data-page=' + i + '>' + i + '</span>')
+                    }
+                },
+                viewHtml: function () {
+                    var settings = this.settings;
+                    var pageTatol = Math.ceil(settings.total / settings.pageSize);
+                    var pageArr = [];
+                    this.pageNum = settings.page;
+                    this.element.empty();
+                    if (settings.showTotal) {
+                        pageArr.push('<div class="page_total">' + settings.totalTxt.replace(/\{(\w+)\}/gi, settings.total) + '</div>')
+                    }
+                    pageArr.push('<div class="page_number">');
+                    this.pageList = [];
+                    if (settings.showPN) {
+                        settings.page == 1 ? this.pageList.push('<span class="span-disabled" data-page="prev">' + settings.prevPage + '</span>') : this.pageList.push('<span data-page="prev">' + settings.prevPage + '</span>')
+                    }
+                    if (pageTatol <= 6) {
+                        for (var i = 1; i < pageTatol + 1; i++) {
+                            this.creatHtml(i)
+                        }
+                    } else {
+                        if (settings.page < 5) {
+                            for (var i = 1; i <= 5; i++) {
+                                this.creatHtml(i)
+                            }
+                            this.pageList.push('<span data-page="none">...</span><span data-page=' + pageTatol + '>' + pageTatol + '</span>')
+                        } else if (settings.page > pageTatol - 4) {
+                            this.pageList.push('<span data-page="1">1</span><span data-page="none">...</span>');
+                            for (var i = pageTatol - 4; i <= pageTatol; i++) {
+                                this.creatHtml(i)
+                            }
+                        } else {
+                            this.pageList.push('<span data-page="1">1</span><span data-page="none">...</span>');
+                            for (var i = settings.page - 2; i <= Number(settings.page) + 2; i++) {
+                                this.creatHtml(i)
+                            }
+                            this.pageList.push('<span data-page="none">...</span><span data-page=' + pageTatol + '>' + pageTatol + '</span>')
+                        }
+                    }
+                    if (settings.showPN) {
+                        settings.page == pageTatol ? this.pageList.push('<span class="span-disabled" data-page="next">' + settings.nextPage + '</span>') : this.pageList.push('<span data-page="next">' + settings.nextPage + '</span>')
+                    }
+                    pageArr.push(this.pageList.join(''));
+                    pageArr.push('</div>');
+                    if (settings.showSkip) {
+                        pageArr.push('<div class="page_skip">跳至 <input type="text" /> 页  <span data-page="go">确定</span></div>')
+                    }
+                    this.element.append(pageArr.join(''));
+                    if (settings.showSkip) {
+                        this.element.children(".page_skip").children("input").val(settings.page)
+                    }
+                },
+                clickBtn: function () {
+                    var that = this;
+                    var settings = this.settings;
+                    var ele = this.element;
+                    var pageTatol = Math.ceil(settings.total / settings.pageSize);
+                    this.element.off('click', "span");
+                    this.element.on('click', "span", function () {
+                        var pageText = $(this).data("page");
+                        switch (pageText) {
+                            case "prev":
+                                settings.page = settings.page - 1 >= 1 ? settings.page - 1 : 1;
+                                pageText = settings.page;
+                                break;
+                            case "next":
+                                settings.page = Number(settings.page) + 1 <= pageTatol ? Number(settings.page) + 1 : pageTatol;
+                                pageText = settings.page;
+                                break;
+                            case "none":
+                                return;
+                            case "go":
+                                var p = parseInt(ele.children(".page_skip").children("input").val());
+                                if (/^[0-9]*$/.test(p) && p >= 1 && p <= pageTatol) {
+                                    settings.page = p;
+                                    pageText = p
+                                } else {
+                                    return
+                                }
+                                break;
+                            default:
+                                settings.page = pageText
+                        }
+                        if (pageText == that.pageNum) {
+                            return
+                        }
+                        that.pageNum = settings.page;
+                        that.viewHtml();
+                        settings.backFun(pageText)
+                    });
+                    this.element.on('keyup', "input", function (event) {
+                        if (event.keyCode == 13) {
+                            var p = parseInt(ele.children(".page_skip").children("input").val());
+                            if (/^[0-9]*$/.test(p) && p >= 1 && p <= pageTatol) {
+                                settings.page = p;
+                                that.pageNum = p;
+                                that.viewHtml();
+                                settings.backFun(p)
+                            } else {
+                                return
+                            }
+                        }
+                    })
+                }
+            }
+            new Plugin(ele,options)
+        },
+        switch:function(options){
+            if(!options.ele) throw new Error('请选择节点');
+            var defaultOption={
+                value:false,
+                text:false,
+                disabled:true,
+                change:function(){
+
+                }
+            }
+            var opt = $.extend({},defaultOption,options);
+            if(! opt.change instanceof Function) throw new Error('change 必须是函数')
+            $this = $(opt.ele);
+            if(opt.disabled){
+                $this.css({
+                     cursor:'not-allowed'
+                 })
+             }
+            $this.addClass('ui_switch');
+             if(opt.value){
+                $this.addClass('is_true')
+             };
+            $this.html('<div class="point"></div>');
+ 
+             let a=   $this.on('click',function(){
+                 if(!opt.disabled){
+                     $(this).toggleClass('is_true');
+                     opt.value = !opt.value;
+                     opt.change(opt.value);
+                 }
+             })
+            var obj = {
+                isOpen:function(){
+                    return $this.hasClass('is_true')
+                }
+            }
+            return obj
+          
+        },
+        // 下拉选择框
+        select:function(options){
+            if(!options.ele) throw new Error('请选择节点');
+            var defaultOption = {
+                multiple:false,
+                disabled:false,
+                filterable:true,
+                change:function(){
+
+                },
+                clearable:true
+            }
+
+
+
+
         }
+
     }
     $.each(['success', 'warning', 'info', 'error'], function (index, el) {
         UI.message[el] = function () {
             return Methods.message(el, arguments)
         };
-        UI.message['close'] = function (target) {
-            $(target || '.ui_message_container').animate({
-                opacity: 0,
-                marginTop: '-60px'
-            }, 400, function () {
-                var onClose = $(this).data('ui-message-onClose')
-                if (onClose) { onClose(); }
-                $(this).remove();
-                var size = $('.ui_message_container').length;
-                if (!size) { $('.ui_message').remove() }
-            })
-        },
-            UI.notify['close'] = function (target) {
-                $(target || '.ui_notify').animate({
-                    opacity: 0,
-                    top:'-100px '
-                }, 400, function () {
-                    var onClose = $(this).data('ui-notify-onClose')
-                    if (onClose) { onClose(); }
-                    $(this).remove();
-                    var size = $('.ui_notify').length;
-                    if (!size) { $('.ui_notify').remove() }
-                })
-            }
+        UI.notify[el] = function () {
+            return Methods.notify(el, arguments)
+        };
     });
+
+    UI.message['close'] = function (target) {
+        $(target || '.ui_message_container').animate({
+            opacity: 0,
+            marginTop: '-60px'
+        }, 400, function () {
+            var onClose = $(this).data('ui-message-onClose')
+            if (onClose) { onClose(); }
+            $(this).remove();
+            var size = $('.ui_message_container').length;
+            if (!size) { $('.ui_message').remove() }
+        })
+    }
+    UI.notify['close'] = function (target) {
+        $(target || '.ui_notify').animate({
+            opacity: 0,
+            top: '-100px '
+        }, 400, function () {
+            var onClose = $(this).data('ui-notify-onClose')
+            if (onClose) { onClose(); }
+            $(this).remove();
+            var $container = $('.ui_notify')
+            $container.each(function (index, el) {
+                var h = $(el).outerHeight();
+                $(el).css({
+                    top: ((h + 10) * index) + 'px'
+                })
+            })
+        })
+    }
     $(function () {
         // check 样式显示
         $('label.ui_checkbox').each(function (index, el) {

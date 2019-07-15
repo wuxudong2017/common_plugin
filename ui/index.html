@@ -8,55 +8,31 @@
     <title>Document</title>
     <link rel="stylesheet" href="./font/iconfont.css">
     <link rel="stylesheet" href="./css/ui.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+    </style>
 </head>
 
 <body>
-    <!-- <div role="alert" class="ui_notify" style="top: 16px; z-index: 2001; right:10px">
-        <div class="info">
-            <div class="icon">
-                <i class="iconfont icon-success"></i>
-            </div>
-            <div class="group">
-                <h2 class="title">提示</h2>
-                <div class="content">
-                    <p>这是一条不会自动关闭的消息</p>
-                </div>
-             
-            </div>
-            <div class="ui_notify_close"><i class="iconfont icon-close-fill"></i></div>
-        </div>
-    </div> -->
-
-    <button id="btn" class="btn">Click</button>
-
-
+<div class="selectBox"></div>
 </body>
 <script src="./js/jquery.js"></script>
 <script src="./js/ui.js"></script>
 <script>
     $(function () {
-        $('#btn').click(function(){
-            UI.notify({
-            type: 'success',
-            message: '你死啦是否看见爱上的划分空间的哈桑复合大师',
-            duration: 2000,
-            showClose: true,
-            onClose() {
-                console.log('close')
-            },
-            position:'to-right'
+        UI.select({
+            ele:".selectBox",
+            multiple:false,
+                disabled:false,
+                filterable:true,
+                change:function(val){
+                    console.log(val)
+                },
+                clearable:true
         })
-        })
-        // UI.notify({
-        //     type: 'success',
-        //     message: '你死啦是否看见爱上的划分空间的哈桑复合大师',
-        //     duration: 2000,
-        //     showClose: true,
-        //     onClose() {
-        //         console.log('close')
-        //     },
-        //     position:'to-right'
-        // })
     })
 
 

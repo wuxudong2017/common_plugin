@@ -78,7 +78,6 @@ $primary: #409eff;
   color: #606266;
   -webkit-appearance: none;
   text-align: center;
-  box-sizing: border-box;
   outline: none;
   margin: 0;
   transition: 0.1s;
@@ -302,6 +301,9 @@ $primary: #409eff;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s, transform 0.3s, left 0.3s, right 0.3s, top 0.4s, bottom 0.3s;
   overflow: hidden;
+  .group{
+    float: left;
+  }
   .icon{
       float: left;
       .iconfont{
@@ -329,5 +331,117 @@ $primary: #409eff;
     cursor: pointer;
     color: #909399;
     font-size: 16px;
+  }
+}
+.page_container{
+  padding:10px 8px;
+  .page_total {
+    display:inline-block;
+    margin-right:20px;
+    line-height:35px;
+    color:#666;
+    font-size:14px
+  }
+  .page_number {
+    display:inline-block;
+    color:#666;
+    font-size:14px;
+    span {
+      position: relative;
+      box-sizing: border-box;
+      display: inline-block;
+      margin-left: -1px;
+      padding: 0 12px;
+      line-height: 24px;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+      background-color: #f4f4f5;
+      margin-right: 10px;
+      border-radius: 3px;
+      &.active {
+        background:$primary;
+        color:#fff;
+        z-index:3;
+        &:hover {
+          background:$primary;
+          color:#fff;
+          border-color:$primary;
+          border-color:$primary;
+          z-index:3
+        }
+      }
+    }
+    .span-disabled {
+      cursor:not-allowed;
+      color:#ccc
+    }
+  }
+  .page_skip {
+    display:inline-block;
+    margin-left:20px;
+    line-height:35px;
+    color:#666;
+    font-size:14px;
+    input {
+      box-sizing: border-box;
+      display: inline-block;
+      width: 33px;
+      height: 28px;
+      line-height: 28px;
+      text-align: center;
+      vertical-align: middle;
+      border: 1px solid #ddd;
+      outline: 0;
+      transition: all 0.2s;
+      &:focus {
+        border-color:$primary;
+      }
+    }
+    span {
+      display: inline-block;
+      padding: 0 12px;
+      line-height: 28px;
+      vertical-align: middle;
+      background-color: #f4f4f5;
+      outline: 0;
+      cursor: pointer;
+      transition: all 0.2s;
+      &:hover {
+        background:$primary;
+        color:#fff;
+      }
+    }
+  }
+}
+// ui_switch
+.ui_switch{
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  overflow: hidden;
+  border: 1px #ddd solid;
+  background-color: $error;
+  border-color: $error;
+  border-radius: 20px;
+  transition:  all .5s;
+  cursor: pointer;
+  .point{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    left: 0;
+    top: 0;
+    transition:  all .5s;
+  }
+}
+.is_true{
+  background-color: $success;
+  border-color: $success;
+  .point{
+    left:20px;
   }
 }
