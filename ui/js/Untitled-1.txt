@@ -1,0 +1,84 @@
+//匿名封装$ ,防止外部代码的冲突污染
+;(function($){
+    var plugin,pluginName = "box",privateMethod;  // 声明插件名和插件的私有方法
+ 
+    /**
+     * 这里是插件的主体部分
+     * 这里是一个自运行的单例模式。
+     * 这里之所以用一个 Plugin 的单例模式 包含一个 Plugin的类，主要是为了封装性，更好的划分代码块
+     * 同时 也 方便区分私有方法及公共方法
+     * PS：但有时私有方法为了方便还是写在了Plugin类里，这时建议私有方法前加上"_"
+     */
+    plugin = (function(){
+         
+        //实例化插件部分 @param element 传入jq对象的选择器  $("#J_plugin").plugin() ,其中 $("#J_plugin") 即是 element
+        //* @param options 插件的一些参数
+        function plugin(element,options){
+             
+            //将dom jquery 对象赋给插件保存,方便使用
+            this.$element = $(element);
+ 
+            //将插件的默认参数及用户定义的参数合并到一个新的obj里
+            this.settings = $.extend({}, $.fn[pluginName].defaults,options);
+            //如果将参数设置在dom的自定义属性里，也可以这样写
+            this.settings = $.extend({}, $.fn[pluginName].defaults, this.$element.data(), options);
+ 
+            this.init();//初始化
+        }
+ 
+        //插件的公共方法 写法1
+        // plugin.prototype.dosomething = function(){
+        //     //....
+        // }
+ 
+        //插件的公共方法 写法2
+        plugin.prototype = {
+            init:function (){
+                this.dosomething2()
+            },
+            dosomething2: function(){
+                //... 
+                console.log(this.settings)
+               $(this.$element).on('click',function(){
+                   alert('Hello World')
+               })
+            }
+        };
+ 
+        return plugin;
+    }) (); 
+ 
+    //插件的私有方法
+    privateMethod = function(){
+    }
+ 
+    //将plugin对象转换为jquery插件对象
+    $.fn[pluginName] = function(options){
+        return this.each(function(){
+            var $me = $(this), instance = $me.data('plugin');
+            console.log(instance)          
+            if(!instance){
+                //将实例化后的插件缓存在dom结构里（内存里）
+                $me.data('plugin', new plugin(this, options));
+            }
+ 
+            //优雅处： 如果插件的参数是一个字符串，则 调用 插件的 字符串方法。
+            // * 如 $('#id').plugin('doSomething') 则实际调用的是 $('#id).plugin.doSomething
+            //  doSomething是刚才定义的接口(公共方法) * 这种方法 在 juqery ui 的插件里 很常见
+            if ($.type(options) === 'string') instance[options]();
+        });
+    };
+ 
+    //插件的默认参数
+    $.fn[pluginName].defaults = {
+        xx: 'a',
+        xxx: 123
+    };
+ 
+    //优雅处： 通过plugin-xxx 的方式 实例化插件  这样的话 在页面上就不需要显示调用了。
+    // 可以查看bootstrap 里面的JS插件写法
+    $(function(){
+        return new plugin( $('[plugin-'+pluginName+']'));
+    });
+     
+}) (jQuery)
