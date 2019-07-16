@@ -206,7 +206,7 @@
             var str = ""
             $.each(opt.data, function (index, item) {
                 str += '<label for="radio" class="ui_radio ' + (item.checked ? 'is_checked' : '') + ' ">' +
-                    '<span class="ui_radio_input"><span class="ui_radio_icon"></span><input type="radio"  class="ui_radio_original" name="' + (item.name) + '" value="' + (item.value) + '"' + (item.checked ? 'checked' : ' ') + ' ></span><span class="ui_radio_label">' + (item.label) + '</span></label>'
+                    '<input type="radio"  class="ui_radio_original" name="' + (item.name) + '" value="' + (item.value) + '"' + (item.checked ? 'checked' : ' ') + ' ><span class="ui_radio_input"><span class="ui_radio_icon"></span></span><span class="ui_radio_label">' + (item.label) + '</span></label>'
             });
             $this.each(function () {
                 var $this = $(this)
@@ -517,23 +517,19 @@
             var checkbox = $this.find('input[type="radio"]');
             if (checkbox.length == 1) {
                 var $wrap = $('<span class="ui_radio_input"></span>');
-
-                checkbox.wrap($wrap.append('<span class="ui_radio_icon"></span>'))
+                checkbox.after($wrap.append('<span class="ui_radio_icon"></span>'))
                 var label = $('input', $this).attr('label');
                 $this.append('<span class="ui_radio_label">' + label + '</span>');
             }
             if (checkbox.attr('checked')) {
                 $this.addClass('is_checked')
-            }
-            $(el).on('click', function () {
-                $(this).toggleClass('is_checked');
-                if ($(this).hasClass('is_checked')) {
-                    $('input', this).attr('checked', true);
-                } else {
-                    $('input', this).removeAttr('checked')
-                }
+            };
+            $(el).click(function(){
+                $(this).addClass('is_checked').siblings().removeClass('is_checked');
+                $(this).children('input').attr('checked',true);
+                $(this).siblings().children('input').removeAttr('checked')
             })
-        })
+        });
 
     })
 
