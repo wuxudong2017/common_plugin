@@ -440,15 +440,46 @@
                 multiple:false,
                 disabled:false,
                 filterable:true,
+                name:'selectName',
+                data:[],
                 change:function(){
-
                 },
                 clearable:true
-            }
-
-
-
-
+            };
+            if (!options.ele) throw new Error('请确定节点');
+            var $this = $(options.ele);
+            var opt = $.extend({}, defaultOption, options);
+            if (!opt.data instanceof Array) return;
+            var str = '<select class="ui_select_origin" name="'+opt.name+'">';
+            var $container = $('<div class="ui_select_container"></div>');
+            var $input = $('<div class="input_box"><input type="text" autocomplete="off" readonly placeholder="请选择"><i class="icon"></i></div>')
+            var $list = $('<ul class="list"></ul>')
+            var item = '';
+            $.each(opt.data,function(index,el){
+                str+='<option value="'+el.value+'" '+(el.selected?'selected':' ')+'>'+el.label+'</option>';
+                item+= '<li class="'+(el.selected?'is_select': ' ')+'" data-value="'+el.value+'"  data-label="'+el.label+'">'+el.label+'</li>'
+                if(el.selected){
+                    $input.children().first().val(el.label)
+                }
+            });
+            str+='</select>';
+            $this.html(str);
+            $list.html(item)
+            $container.append($input).append($list);
+            $this.append($container);
+            var $opt = $('option',$this);
+            $input.bind('click',function(){
+                $list.show()
+            })
+             $('li',$list).each(function(index,el){
+                $(el).on('click',function(){
+                    var val = $(this).data('value');
+                    $('select option[value="'+val+'"]',$this).attr('selected',true).siblings('option').removeAttr('selected')
+                    $(this).addClass('is_select').siblings().removeClass('is_select');
+                    $list.hide();
+                    $input.children().first().val($(this).data('label'))
+                })
+            })
         }
 
     }

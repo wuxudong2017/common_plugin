@@ -3,29 +3,30 @@ $success: #67c23a;
 $warning: #e6a23c;
 $error: #f56c6c;
 $primary: #409eff;
-.ui_message , .ui_notify{
-    .info {
-      .iconfont {
-        color: $info;
-      }
+.ui_message,
+.ui_notify {
+  .info {
+    .iconfont {
+      color: $info;
     }
-    .success {
-      .iconfont {
-        color: $success;
-      }
+  }
+  .success {
+    .iconfont {
+      color: $success;
     }
-    .warning {
-      .iconfont {
-        color: $warning;
-      }
+  }
+  .warning {
+    .iconfont {
+      color: $warning;
     }
-    .error {
-      .iconfont {
-        color: $error;
-      }
+  }
+  .error {
+    .iconfont {
+      color: $error;
     }
+  }
 }
-.ui_message  {
+.ui_message {
   position: fixed;
   left: 0;
   top: 0;
@@ -253,17 +254,17 @@ $primary: #409eff;
     }
   }
   .ui_radio_original,
-    input {
-      opacity: 0;
-      outline: none;
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: 0;
-    }
+  input {
+    opacity: 0;
+    outline: none;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+  }
   .ui_radio_label {
     font-size: 14px;
     padding-left: 5px;
@@ -301,15 +302,15 @@ $primary: #409eff;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s, transform 0.3s, left 0.3s, right 0.3s, top 0.4s, bottom 0.3s;
   overflow: hidden;
-  .group{
+  .group {
     float: left;
   }
-  .icon{
-      float: left;
-      .iconfont{
-        font-size: 20px;
-        padding-right: 8px;
-      }
+  .icon {
+    float: left;
+    .iconfont {
+      font-size: 20px;
+      padding-right: 8px;
+    }
   }
   .title {
     font-weight: 700;
@@ -317,14 +318,14 @@ $primary: #409eff;
     color: #303133;
     margin: 0;
   }
-  .content{
+  .content {
     font-size: 14px;
     line-height: 21px;
     margin: 6px 0 0;
     color: #606266;
     text-align: justify;
   }
-  .ui_notify_close{
+  .ui_notify_close {
     position: absolute;
     top: 18px;
     right: 15px;
@@ -333,19 +334,19 @@ $primary: #409eff;
     font-size: 16px;
   }
 }
-.page_container{
-  padding:10px 8px;
+.page_container {
+  padding: 10px 8px;
   .page_total {
-    display:inline-block;
-    margin-right:20px;
-    line-height:35px;
-    color:#666;
-    font-size:14px
+    display: inline-block;
+    margin-right: 20px;
+    line-height: 35px;
+    color: #666;
+    font-size: 14px;
   }
   .page_number {
-    display:inline-block;
-    color:#666;
-    font-size:14px;
+    display: inline-block;
+    color: #666;
+    font-size: 14px;
     span {
       position: relative;
       box-sizing: border-box;
@@ -360,29 +361,29 @@ $primary: #409eff;
       margin-right: 10px;
       border-radius: 3px;
       &.active {
-        background:$primary;
-        color:#fff;
-        z-index:3;
+        background: $primary;
+        color: #fff;
+        z-index: 3;
         &:hover {
-          background:$primary;
-          color:#fff;
-          border-color:$primary;
-          border-color:$primary;
-          z-index:3
+          background: $primary;
+          color: #fff;
+          border-color: $primary;
+          border-color: $primary;
+          z-index: 3;
         }
       }
     }
     .span-disabled {
-      cursor:not-allowed;
-      color:#ccc
+      cursor: not-allowed;
+      color: #ccc;
     }
   }
   .page_skip {
-    display:inline-block;
-    margin-left:20px;
-    line-height:35px;
-    color:#666;
-    font-size:14px;
+    display: inline-block;
+    margin-left: 20px;
+    line-height: 35px;
+    color: #666;
+    font-size: 14px;
     input {
       box-sizing: border-box;
       display: inline-block;
@@ -395,7 +396,7 @@ $primary: #409eff;
       outline: 0;
       transition: all 0.2s;
       &:focus {
-        border-color:$primary;
+        border-color: $primary;
       }
     }
     span {
@@ -408,14 +409,14 @@ $primary: #409eff;
       cursor: pointer;
       transition: all 0.2s;
       &:hover {
-        background:$primary;
-        color:#fff;
+        background: $primary;
+        color: #fff;
       }
     }
   }
 }
 // ui_switch
-.ui_switch{
+.ui_switch {
   position: relative;
   display: inline-block;
   width: 40px;
@@ -425,9 +426,9 @@ $primary: #409eff;
   background-color: $error;
   border-color: $error;
   border-radius: 20px;
-  transition:  all .5s;
+  transition: all 0.5s;
   cursor: pointer;
-  .point{
+  .point {
     position: absolute;
     width: 20px;
     height: 20px;
@@ -435,13 +436,88 @@ $primary: #409eff;
     background-color: #fff;
     left: 0;
     top: 0;
-    transition:  all .5s;
+    transition: all 0.5s;
   }
 }
-.is_true{
+.is_true {
   background-color: $success;
   border-color: $success;
-  .point{
-    left:20px;
+  .point {
+    left: 20px;
   }
+}
+//  select
+.ui_select_container {
+  width: 200px;
+  height: 34px;
+  .input_box {
+    height: 32px;
+    border: #dfdfdf solid 1px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    position: relative;
+    input {
+      width: 150px;
+      padding: 0 10px;
+      border: 0;
+      height: 32px;
+      pointer-events: none;
+    }
+    .icon {
+      width: 30px;
+      height: 32px;
+      text-align: center;
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      &:after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        margin-top: 12px;
+        margin-left: 5px;
+        border-width: 6px;
+        border-color: transparent;
+        border-style: solid;
+        border-top-color: #333333;
+      }
+    }
+  }
+  .list {
+    font-size: 14px;
+    padding: 6px 0;
+    border: #e6e6e6 solid 1px;
+    background: #fff;
+    position: relative;
+    z-index: 99;
+    border-radius: 4px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 386px;
+    display: none;
+    box-shadow: rgba(0, 0, 0, 0.07) 0 2px 9px;
+    li {
+      position: relative;
+      padding: 8px;
+      cursor: pointer;
+      color: #333;
+      transition: 0.1s;
+      &:hover {
+        background: #f6f6f6;
+        color: $primary;
+      }
+    }
+    .is_select {
+      background: #f6f6f6;
+      color: $primary;
+      font-weight: 600;
+    }
+  }
+}
+.ui_select_origin {
+  display: none;
 }
