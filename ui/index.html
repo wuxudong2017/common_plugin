@@ -17,54 +17,40 @@
 </head>
 
 <body>
-    <!-- <div class="selectBox"></div>
-        <div class="ui_select_container">
-           <div class="input_box">
-               <input type="text" autocomplete="off" readonly placeholder="请选择">
-               <i class="icon"></i>
-           </div>
-           <ul class="list">
-               <li class="is_select">金星</li>
-               <li>金星</li>
-               <li>金星</li>
-               <li>金星</li>
-               <li>金星</li>
-               <li>金星</li>
-           </ul>
+    <button class="btn btn-error">Click</button>
+    <!-- <div class="msgbox_wrap">
+        <div class="msgbox_box">
+            <div class="msgbox_header">
+                <div class="msgbox_title">title</div>
+                <span class="msgbox_close"><i class="iconfont icon-close-fill"></i></span>
+            </div>
+            <div class="msgbox_content">
+                kkkk
+            </div>
+            <div class="msgbox_footer">
+                <button class="btn btn-default btn-small">取消</button>
+                <button class="btn btn-primary btn-small">确定</button>
+            </div>
         </div>
-    <div> -->
-<div class="selectBox"></div>
+    </div>
+    <div class="v-modal"></div> -->
 
-<button class="btn">Click</button>
-<h1 id="h1"></h1>
+
 
 </body>
 <script src="./js/jquery.js"></script>
 <script src="./js/ui.js"></script>
 <script>
     $(function () {
-        UI.select({
-            ele: ".selectBox",
-            name:'name',
-            multiple: false,
-            change: function (val) {
-                console.log(val)
-            },
-            clearable: true,
-            data: [{
-                value: 1, label: 'kk',
-               
-            }, {
-                selected:true,
-                value: 2, label: 'mm'
-            }, {
-                value: 3, label: 'nn'
-            }]
+       $('.btn').click(function(){
+        UI.msgbox({
+            callback(){
+
+            }
         })
-        $('.btn').click(function(){
-          $('#h1').text(  $('select>option:selected').val())
-        })
+
     })
+})
 
 
 

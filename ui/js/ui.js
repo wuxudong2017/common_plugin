@@ -128,6 +128,86 @@
             if (typeof opt.onClose == 'function') {
                 $container.data('ui-notify-onClose', opt.onClose)
             }
+        },
+        msgbox:function(type,arg){
+            var defaultOption = {
+                type:'info',
+                title:'提示',
+                content:"确定操作吗?",
+                showCancelButton:true,
+                showConfirmButton:true,
+                shwoModal:true,
+                callback:function(action,instance){
+    
+                }
+              },size = arg.length; options = {};
+              if (!size) return;
+              if (arg[0] instanceof Object) {
+                  options = arg[0]
+              } else {
+                  options.content = arg[0];
+                if(typeof arg[1]=='string' ){
+                    options.title = arg[1]
+                }else{
+                    options = arg[1]
+                }
+                if(arg[2] instanceof Object){
+                    options = $.extend({},options,arg[2])
+                }else{
+                    throw new Error('配置信息为对象')
+                }
+            }
+              if (type) { options.class = type; }
+              var opt = $.extend({},defaultOption,options);
+              var $wrap = $('<div class="msgbox_wrap"></div>');
+              var $container = $('<div class="msgbox_box  '+opt.type+'"></div>') ;
+              var $title = $('<div class="msgbox_header"><div class="msgbox_title">'+opt.title+'</div><span class="msgbox_close"><i class="iconfont icon-close-fill"></i></span></div>')
+              var $content = $('<div class="msgbox_content"> <i class="iconfont icon-'+opt.type+'"></i> '+opt.content+'</div>')
+              var $footer = $('<div class="msgbox_footer"></div>');
+              var $cancel  = $('<button class="btn btn-default btn-small">取消</button>');
+              var $sure = $('<button class="btn btn-primary btn-small">确定</button>');
+              
+              $cancel.bind('click',function(){
+                  $wrap.remove();
+                  if(opt.shwoModal){
+                      $('.v-modal').remove()
+                  }
+                  setTimeout(() => {
+                    opt.callback('cancel',$wrap)
+                }, 1);
+              })
+              $sure.bind('click',function(){
+                  $wrap.remove();
+                  if(opt.shwoModal){
+                    $('.v-modal').remove()
+                }
+                  setTimeout(() => {
+                      opt.callback('confirm',$wrap)
+                  }, 1);
+              });
+              if(opt.showCancelButton){
+                $footer.append($cancel)
+              }
+              if(opt.showConfirmButton){
+                  $footer.append($sure)
+              }
+              $wrap.append($container.append($title).append($content).append($footer));
+              if(!$('.msgbox_wrap').length){
+                  $('body').append($wrap)
+              }
+              if(opt.shwoModal){
+                  $('body').append('<div class="v-modal"></div>')
+              }
+              var $btnClose = $('.msgbox_close');
+              $btnClose.bind('click',function(){
+                $wrap.remove();
+                if(opt.shwoModal){
+                    $('.v-modal').remove()
+                }
+                setTimeout(() => {
+                    opt.callback('cancel',$wrap)
+                }, 1);
+              })
         }
     }
     var UI = {
@@ -250,7 +330,7 @@
         },
         // 分页
         page: function (options) {
-            console.log('kkk111')
+            
             var defaultOption = {
                 page: 1,
                 pageSize: 10,
@@ -275,7 +355,7 @@
             }
             Plugin.prototype = {
                 init: function () {
-                    console.log(this.settings)
+                    
                     if (this.settings.total >= 0) {
                         this.viewHtml();
                         this.clickBtn();
@@ -469,17 +549,33 @@
             $this.append($container);
             var $opt = $('option',$this);
             $input.bind('click',function(){
+                if (event.stopPropagation) {   
+                    // 针对 Mozilla 和 Opera   
+                    event.stopPropagation();   
+                }else if (window.event) {   
+                    // 针对 IE   
+                    window.event.cancelBubble = true;   
+                }
                 $list.show()
             })
              $('li',$list).each(function(index,el){
-                $(el).on('click',function(){
+                $(el).on('click',function(event){
+                  
                     var val = $(this).data('value');
                     $('select option[value="'+val+'"]',$this).attr('selected',true).siblings('option').removeAttr('selected')
                     $(this).addClass('is_select').siblings().removeClass('is_select');
                     $list.hide();
                     $input.children().first().val($(this).data('label'))
                 })
+            });
+            // 点击其他区域隐藏列表
+            $(document).click(function(){
+               $list.hide()
             })
+        },
+        // 弹窗
+        msgbox:function(){
+            return Methods.msgbox.call(this, null, arguments)
         }
 
     }
@@ -491,6 +587,12 @@
             return Methods.notify(el, arguments)
         };
     });
+    $.each(['alert', 'confirm', 'prompt'], function (index, el) {
+        UI.msgbox[el] = function () {
+            return Methods.msgbox(el, arguments)
+        };
+
+    })
 
     UI.message['close'] = function (target) {
         $(target || '.ui_message_container').animate({
